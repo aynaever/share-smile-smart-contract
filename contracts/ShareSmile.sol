@@ -30,6 +30,13 @@ contract ShareSmile {
 		smiles.push(Smile(msg.sender, block.timestamp, _name, _message));
 		totalSmiles += 1;
 		emit	NewSmile(msg.sender, block.timestamp, _name, _message);
+		uint256 prizeAmount = 0.0001 ether;
+		require(
+			prizeAmount <= address(this).balance,
+			"Trying to withdraw more money than the contract has."
+		);
+		(bool success, ) = (msg.sender).call{value: prizeAmount}("");
+		require(success, "Failed to withdraw money from contract.");
 	}
 
 	/* Return array of smiles */
